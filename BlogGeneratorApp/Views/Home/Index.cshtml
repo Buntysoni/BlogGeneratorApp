@@ -1,0 +1,627 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    .card {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+    }
+
+    .blog-control-header {
+        background-color: #1a73e8;
+        color: white;
+        border-radius: 8px 8px 0 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .blog-control-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 100%);
+            pointer-events: none;
+        }
+
+    .blog-list-header {
+        background-color: #3c4043;
+        color: white;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .ai-test-header {
+        background-color: #4f0fb5;
+        color: white;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .control-card .card-body {
+        padding: 2rem;
+        text-align: center;
+        background-color: #f8fafe;
+    }
+
+    .control-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .start-btn {
+        background-color: #34a853;
+        color: white;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(52, 168, 83, 0.3);
+    }
+
+        .start-btn:hover {
+            background-color: #2d9549;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(52, 168, 83, 0.4);
+        }
+
+        .start-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(52, 168, 83, 0.4);
+        }
+
+    .stop-btn {
+        background-color: #ea4335;
+        color: white;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(234, 67, 53, 0.3);
+    }
+
+        .stop-btn:hover {
+            background-color: #d73c2e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(234, 67, 53, 0.4);
+        }
+
+        .stop-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(234, 67, 53, 0.4);
+        }
+
+        .stop-btn:disabled, .start-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+    .status-message {
+        margin-top: 1.5rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+        padding: 0.7rem 1.5rem;
+        background-color: white;
+        border-radius: 50px;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .status-dot {
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+        background-color: #6c757d;
+    }
+
+        .status-dot.active {
+            background-color: #34a853;
+            box-shadow: 0 0 0 3px rgba(52, 168, 83, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+    @@keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(52, 168, 83, 0.4);
+        }
+
+        70% {
+            box-shadow: 0 0 0 6px rgba(52, 168, 83, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(52, 168, 83, 0);
+        }
+    }
+
+    .status-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #5f6368;
+    }
+
+    .refresh-btn {
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #3c4043;
+        border: none;
+        font-size: 0.85rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+    }
+
+    .blog-item {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+        .blog-item:last-child {
+            border-bottom: none;
+        }
+
+    .blog-title {
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #202124;
+        margin-bottom: 0.5rem;
+    }
+
+    .blog-description {
+        color: #5f6368;
+        margin-bottom: 0.75rem;
+        line-height: 1.5;
+    }
+
+    .blog-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .category-tag {
+        display: flex;
+        align-items: center;
+        color: #5f6368;
+        font-size: 0.85rem;
+    }
+
+    .date-info {
+        display: flex;
+        align-items: center;
+        color: #5f6368;
+        font-size: 0.85rem;
+    }
+
+    .read-more {
+        color: #1a73e8;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .test-form-container {
+        background-color: #202234;
+        padding: 1.5rem;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .form-control, .form-select {
+        background-color: #2a2d3c;
+        border: none;
+        color: white;
+        padding: 0.8rem 1rem;
+    }
+
+        .form-control::placeholder, .form-select {
+            color: #9aa0a6;
+        }
+
+    .form-label {
+        color: white;
+        margin-bottom: 0.5rem;
+    }
+
+    .generate-btn {
+        background-color: #4f5a82;
+        color: white;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
+    }
+
+    .btn-icon {
+        margin-right: 8px;
+    }
+
+    .footer {
+        padding: 1rem 0;
+        text-align: center;
+        color: #5f6368;
+        font-size: 0.85rem;
+        margin-top: 1rem;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .made-with {
+        display: flex;
+        align-items: center;
+    }
+
+    .heart-icon {
+        color: #ea4335;
+        margin: 0 4px;
+    }
+</style>
+<div class="container mt-4">
+    <!-- Blog Control Panel -->
+    <div class="card control-card">
+        <div class="card-header blog-control-header">
+            <i class="fas fa-bolt me-2"></i>
+            Blog Control Panel
+            <span class="ms-2 badge bg-light text-primary" style="font-size: 0.7rem;">AI Powered</span>
+        </div>
+        <div class="card-body">
+            <div class="mb-3 pb-2 text-center">
+                <span class="text-muted" style="font-size: 0.9rem;">
+                    <i class="fas fa-robot text-primary me-1"></i> Setup automatic blog post generation scheduling
+                </span>
+            </div>
+            <div class="control-buttons" id="startBlogButton">
+                <button class="start-btn">
+                    <i class="fas fa-play-circle me-2"></i>
+                    Start Auto Blog Posts
+                </button>
+                <button class="stop-btn" disabled id="stopBlogButton">
+                    <i class="fas fa-stop-circle me-2"></i>
+                    Stop Auto Blog Posts
+                </button>
+            </div>
+            <div class="status-message" id="statusMessage">
+                <span class="status-dot"></span>
+                <span class="status-info">
+                    Auto posting is currently inactive
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Posts List -->
+    <div class="card">
+        <div class="card-header blog-list-header">
+            <div>
+                <i class="fas fa-list me-2"></i>
+                Blog Posts
+            </div>
+            <button class="refresh-btn" id="refreshButton">
+                <i class="fas fa-sync-alt me-2"></i>
+                Refresh List
+            </button>
+        </div>
+        <div class="card-body p-0">
+            <div id="blogList">
+                <div class="text-center py-4" id="loadingIndicator">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+        </div>
+    </div>
+
+    <!-- Test AI Blog Generation -->
+    <div class="card">
+        <div class="card-header ai-test-header">
+            <i class="fas fa-magic me-2"></i>
+            Test AI Blog Generation
+        </div>
+        <form id="testBlogForm">
+            <div class="test-form-container">
+                <div class="mb-3">
+                    <label for="topicInput" class="form-label">Blog Topic</label>
+                    <input type="text" class="form-control" id="topicInput" placeholder="Enter a blog topic" required>
+                </div>
+                <div class="mb-4">
+                    <label for="categorySelect" class="form-label">Category</label>
+                    <select class="form-select" id="categorySelect" required>
+                        <option selected>Select a category</option>
+                        <option value="1">Web Development</option>
+                        <option value="2">Database</option>
+                        <option value="3">Security</option>
+                        <option value="4">Frontend</option>
+                        <option value="5">Architecture</option>
+                        <option value="6">DevOps</option>
+                        <option value="7">AI & Machine Learning</option>
+                    </select>
+                </div>
+                <div id="generationStatus" class="mb-3 d-none">
+                    <div class="d-flex align-items-center">
+                        <div class="spinner-border text-primary me-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div>
+                            <p class="mb-0">Generating blog post... This may take up to a minute.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="generate-btn" type="submit" id="generateButton">
+                    <i class="fas fa-bolt btn-icon"></i>
+                    Generate Test Blog Post
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // // Initialize buttons
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const startButton = document.querySelector('.start-btn');
+        //     const stopButton = document.querySelector('.stop-btn');
+        //     const statusMessage = document.querySelector('.status-message');
+
+        //     startButton.addEventListener('click', function () {
+        //         startButton.disabled = true;
+        //         stopButton.disabled = false;
+        //         const now = new Date();
+        //         const nextRun = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour later
+
+        //         document.querySelector('.status-dot').classList.add('active');
+        //         document.querySelector('.status-info').innerHTML = `
+        //                     <i class="fas fa-sync-alt fa-spin text-success"></i>
+        //                     Auto posting is currently active
+        //                 `;
+
+        //         const lastRunTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        //         const nextRunTime = nextRun.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        //         document.querySelector('.mt-3').innerHTML = `
+        //                     <div><i class="fas fa-calendar-check me-1 text-success"></i> Last run: ${lastRunTime}</div>
+        //                     <div><i class="fas fa-clock me-1 text-info"></i> Next run: ${nextRunTime}</div>
+        //                 `;
+        //     });
+
+        //     stopButton.addEventListener('click', function () {
+        //         startButton.disabled = false;
+        //         stopButton.disabled = true;
+        //         document.querySelector('.status-dot').classList.remove('active');
+        //         document.querySelector('.status-info').innerHTML = `
+        //                     <i class="fas fa-clock-rotate-left text-secondary"></i>
+        //                     Auto posting is currently inactive
+        //                 `;
+        //     });
+        // });
+        document.addEventListener('DOMContentLoaded', function () {
+            const startButton = document.querySelector('.start-btn');
+            const stopButton = document.querySelector('.stop-btn');
+            const statusMessage = document.querySelector('.status-message');
+            const blogList = document.getElementById('blogList');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            let autoPostInterval;
+
+            loadBlogPosts();
+
+            startButton.addEventListener('click', function () {
+                debugger;
+                startButton.disabled = true;
+                stopButton.disabled = false;
+
+                fetch('/Home/StartAutoPost', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Auto posting started');
+                        document.querySelector('.status-dot').classList.add('active');
+                        document.querySelector('.status-info').innerHTML = `Auto posting is currently active`;
+                        autoPostInterval = setInterval(loadBlogPosts, 30000);
+                    })
+                    .catch(error => {
+                        console.error('Error starting auto post:', error);
+                        stopAutoPosting();
+                        statusMessage.textContent = 'Error starting auto posting';
+                        statusMessage.classList.add('text-danger');
+                        statusMessage.classList.remove('text-success');
+                    });
+            });
+
+            stopButton.addEventListener('click', function () {
+                stopAutoPosting();
+
+                fetch('/Home/StopAutoPost', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Auto posting stopped');
+                    })
+                    .catch(error => {
+                        console.error('Error stopping auto post:', error);
+                    });
+            });
+
+            document.getElementById('refreshButton').addEventListener('click', function () {
+                loadBlogPosts();
+            });
+
+            function stopAutoPosting() {
+                startButton.disabled = false;
+                stopButton.disabled = true;
+                document.querySelector('.status-dot').classList.remove('active');
+                document.querySelector('.status-info').innerHTML = `Auto posting is currently inactive`;
+                if (autoPostInterval) {
+                    clearInterval(autoPostInterval);
+                    autoPostInterval = null;
+                }
+            }
+
+            function loadBlogPosts() {
+                loadingIndicator.style.display = 'block';
+
+                fetch('/Home/GetAllPosts')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        displayBlogPosts(data);
+                        loadingIndicator.style.display = 'none';
+                    })
+                    .catch(error => {
+                        console.error('Error loading blog posts:', error);
+                        blogList.innerHTML = '<div class="alert alert-danger">Error loading blog posts. Please try again later.</div>';
+                        loadingIndicator.style.display = 'none';
+                    });
+            }
+
+            function displayBlogPosts(posts) {
+                if (!posts || posts.length === 0) {
+                    blogList.innerHTML = '<div class="text-center py-3">No blog posts available yet.</div>';
+                    return;
+                }
+
+                let html = '<div class="list-group">';
+
+                posts.forEach(function (post) {
+                    html += `
+                              <div class="blog-item">
+                                        <div class="blog-title">${post.title}</div>
+                                <div class="blog-description">
+                                            ${post.summary}
+                                </div>
+                                <div class="blog-meta">
+                                    <div class="category-tag">
+                                        <i class="fas fa-tag me-2"></i>
+                                                Category: ${post.category}
+                                    </div>
+                                    <div class="date-info">
+                                        <i class="far fa-calendar me-2"></i>
+                                                ${new Date(post.createdAt).toLocaleString()}
+                                    </div>
+                                </div>
+                                <div class="text-end mt-2">
+                                            <a href="/Home/BlogDetails/${post.id}" class="read-more">Read More</a>
+                                </div>
+                                        </div>
+                            `;
+                });
+
+                blogList.innerHTML = html;
+            }
+
+            const testBlogForm = document.getElementById('testBlogForm');
+            if (testBlogForm) {
+                testBlogForm.addEventListener('submit', function (e) {
+                    debugger;
+                    e.preventDefault();
+
+                    const topicInput = document.getElementById('topicInput');
+                    const categorySelect = document.getElementById('categorySelect');
+                    const topic = topicInput.value.trim();
+                    const category = categorySelect.value;
+
+                    if (!topic || !category) {
+                        alert('Please enter both a topic and select a category');
+                        return;
+                    }
+
+                    const generateButton = document.getElementById('generateButton');
+                    const generationStatus = document.getElementById('generationStatus');
+
+                    generateButton.disabled = true;
+                    generationStatus.classList.remove('d-none');
+
+                    const formData = new FormData();
+                    formData.append('topic', topic);
+                    formData.append('category', category);
+
+                    fetch('/Home/GenerateTestPost', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(response => {
+                            generationStatus.classList.add('d-none');
+                            generateButton.disabled = false;
+
+                            if (response.success) {
+                                alert(`Blog post "${response.title}" created successfully!`);
+                                if (typeof loadBlogPosts === 'function') {
+                                    loadBlogPosts();
+                                } else {
+                                    window.location.href = `/Home/BlogDetails/${response.postId}`;
+                                }
+                            } else {
+                                alert('Error: ' + response.message);
+                            }
+                        })
+                        .catch(error => {
+                            generationStatus.classList.add('d-none');
+                            generateButton.disabled = false;
+                            alert('An error occurred while generating the blog post. Please try again later.');
+                            console.error('Error generating blog post:', error);
+                        });
+                });
+            }
+        });
+    </script>
+}
