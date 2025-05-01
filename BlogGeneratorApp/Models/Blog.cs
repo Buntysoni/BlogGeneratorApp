@@ -43,3 +43,9 @@ namespace BlogGeneratorApp.Models
         public int CommentCount { get; set; } = 0;
     }
 }
+
+public class Category
+{
+    public int Id { get; set; }
+    public string? Name { get; set; }
+}

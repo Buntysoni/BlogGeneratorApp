@@ -25,7 +25,7 @@
                 </div>
                 <small class="text-muted">@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</small>
             </div>
-            <h5 class="card-subtitle mb-3 text-muted">@Model.Summary</h5>
+            <h5 class="card-subtitle mb-3 text-muted">@Html.Raw(Model.Summary)</h5>
             <div class="author-info mb-4">
                 <small class="text-muted">Written by @Model.Author | <i class="bi bi-eye"></i> @Model.ViewCount views</small>
             </div>
